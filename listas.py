@@ -1,9 +1,11 @@
-import datetime 
+from datetime import date
+from outras import *
+
 #tempo como global nesse caso
-hoje = datetime.date.today()
+hoje = date.today()
 
 
-#comecemos com uma base que já tenha algumas tarefas por fazer:
+#Base com algumas tarefas criadas hoje
 tarefas = [[1, "limpar cozinha", "Realizar limpeza da cozinha com desinfectante", hoje, "urgente", f"Entrega: 13-11-2024", "Concluída"],
            [2, "Comprar leite", "Comprar leite no mercadinho perto de casa, integral!", hoje, "Não urgente", f"Entrega: 08-12-2024", "Pendente"],
            [3, "Fazer carinho no gato", "fazer carinho no gato por 30min se não fica carente", hoje, "Urgente", f"Entrega: {hoje}", "Pendente"]]
@@ -18,7 +20,8 @@ def exibir_tarefas(tarefas):
     Recebe:
     tarefas: listas
 
-    retorna: mensagem com as informações das tarefas
+    retorna: 
+    mensagem com as informações das tarefas formatadas
     '''
 
     for tarefa in tarefas:
@@ -31,21 +34,9 @@ def exibir_tarefas(tarefas):
         *-*-*-*-*-*-*-*-*-*-*-*
         """)
 
+
+
 #criação de tarefas
-
-def gerar_id(tarefas):
-    '''
-    Função para gerar ID para novas tarefas.
-
-    Recebe:
-    tarefas: listas
-
-    retorna: um número que equivale ao comprimento da lista de tarefas + 1
-    '''
-
-    if not tarefas:
-        return 1
-    return max(tarefa[0] for tarefa in tarefas) + 1
 
 def criar_tarefa():
     '''
@@ -54,49 +45,43 @@ def criar_tarefa():
     Recebe:
     O input com os dados do usuário para a tarefa nova
 
-    retorna: uma nova lista (tarefa) adicionada à lista de tarefas 
+    retorna: 
+    uma nova lista (tarefa) adicionada à lista de tarefas, caso alguma das condições não seja válida, o programa vai perguntar de novo. 
     '''
 
     print("Adicione nova tarefa: ")
     id_novo = gerar_id(tarefas)
     titulo = input("Digite o título da tarefa: ")
     descricao = input("Digite a descrição da tarefa: ")
-    prioridade = input("É Urgente ou Não urgente?: ")
-    prazo = input("Data de entrega: ")
+    prioridade = prioridade_tarefa()
+    prazo = obter_data_entrega()
 
-    nova_tarefa = [id_novo, titulo, descricao, hoje, prioridade, f"Entrega: {prazo}", "Pendente"]
+    nova_tarefa = [id_novo, titulo, descricao, hoje, prioridade, f"{prazo}", "Pendente"]
     tarefas.append(nova_tarefa)
 
     print("Tarefa criada com sucesso!")
     exibir_tarefas([nova_tarefa])
     
-#Editar
-
-    #marcar como concluída
-
-def procurar_tarefa(tarefas, id):
-    for tarefa in tarefas:
-        if tarefa[0] == id:
-            return tarefa
-    return None
-
-"""def achar_tarefa():
-    id = int(input("Qual o ID da tarefa que deseja selecionar"))
-    tarefa_achada = procurar_tarefa(tarefas, id)
 
 
-    if tarefa_achada:
-        return tarefa_achada
-    else:
-        print("Tarefa não encontrada.")"""
+#Mudar status
     
 def mudar_status():
-    id = int(input("Qual o ID da tarefa que deseja marcar como concluída? "))
-    tarefa = procurar_tarefa(tarefas, id)
+    '''
+    Função para criar novas tarefas.
+
+    Recebe:
+    O input com ID da tarefa que deseja mudar para concluída
+
+    retorna: 
+    uma nova lista (tarefa) adicionada à lista de tarefas 
+    '''
+    print("Qual o ID da tarefa que deseja marcar como concluída?")
+    tarefa = achar_tarefa(tarefas)
 
     if tarefa:
-        tarefa[6] = "Concluída"  # Atualiza o status da tarefa para "Concluída"
-        print(f"Tarefa {id} foi atualizada com sucesso para status 'Concluída'.")
+        tarefa[6] = "Concluída"  
+        print(f"Tarefa {tarefa[0]} foi atualizada com sucesso para status 'Concluída'.")
     else:
         print("Tarefa não encontrada.")
 
@@ -105,6 +90,15 @@ def mudar_status():
 #Excluir
  
 def excluir_tarefa():
+    '''
+    Função para excluir tarefas.
+
+    Recebe:
+    O input com ID da tarefa que deseja apagar
+
+    retorna: 
+    apaga a tarefa que tenha esse ID, caso não ache o ID, ele volta ao menu inicial
+    '''
     id = int(input("Qual o ID da tarefa que deseja excluir? "))
     tarefa = procurar_tarefa(tarefas, id)
 
