@@ -17,6 +17,9 @@ def exibir_tarefas(tarefas):
     '''
     Função para exibir todas as tarefas.
 
+    Parâmetros:
+    tarefas (list): Uma lista de tarefas, onde cada tarefa é representada por uma lista
+
     Recebe:
     tarefas: listas
 
